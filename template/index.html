@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Plate Detection</title>
+</head>
+<body>
+    <h2>Upload Video</h2>
+    <input type="file" id="videoInput">
+    <button onclick="uploadVideo()">Upload</button>
+    <div id="output"></div>
+
+    <script>
+        async function uploadVideo() {
+            const file = document.getElementById('videoInput').files[0];
+            const formData = new FormData();
+            formData.append('video', file);
+
+            const res = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            data.plates.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.width = 200;
+                output.appendChild(img);
+            });
+        }
+    </script>
+</body>
+</html>
